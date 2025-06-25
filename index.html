@@ -14,7 +14,31 @@
 </head>
 <body>
   <!-- Header injected -->
-  <div data-include-html="components/header.html"></div>
+ <header class="site-header">
+  <!-- Logo -->
+  <a href="/index.html" class="logo">
+    <img src="/assets/images/logos/logo-main.png.png" alt="Logo">
+  </a>
+
+  <!-- Navigation -->
+  <nav class="nav">
+    <a href="/index.html">მთავარი</a>
+    <a href="/pages/footballers.html">ფეხბურთელები</a>
+    <a href="/pages/resemblance.html">მსგავსების შემოწმება</a>
+    <a href="/pages/login.html" id="loginLink">შესვლა</a>
+    <a href="/pages/register.html" id="registerLink">რეგისტრაცია</a>
+  </nav>
+
+  <!-- Profile Dropdown -->
+  <div class="profile-dropdown" id="profileDropdown" style="display: none;">
+    <img id="profileIcon" src="/assets/images/icons/guest.png" alt="Profile Icon" style="width: 32px; cursor: pointer;">
+    <ul id="profileMenu" class="profile-menu">
+      <li><a href="/pages/profile.html">პროფილი</a></li>
+      <li id="logoutBtn">გასვლა</li>
+    </ul>
+  </div>
+</header>
+
 
   <!-- Hero Section -->
   <section class="hero">
@@ -44,23 +68,6 @@
   <script src="assets/js/animations.js"></script>
 
   <!-- header/footer injector -->
-  <script>
-    (async () => {
-      for (const el of document.querySelectorAll('[data-include-html]')) {
-        const res = await fetch(el.getAttribute('data-include-html'));
-        el.outerHTML = await res.text();
-      }
-    })();
-
-    new Swiper('.heroSwiper', {
-      loop: true,
-      pagination: { el: '.swiper-pagination' },
-      navigation: {
-        nextEl: '.swiper-button-next',
-        prevEl: '.swiper-button-prev'
-      }
-    });
-  </script>
 
   <script type="module" src="/assets/js/auth.js"></script>
 

@@ -12,14 +12,18 @@ async function injectPartials() {
     if (!file) continue;
     try {
       const res = await fetch(file);
-      el.outerHTML = await res.text();
+      const html = await res.text();
+      el.insertAdjacentHTML('afterend', html);  // ✅ Correct insertion
+      el.remove();                              // ✅ Remove the placeholder
     } catch (e) {
       console.error(`[include] ${file} →`, e);
     }
   }
-  /* tell the rest of the script we’re ready */
+
+  // ✅ Signal everything is ready
   window.dispatchEvent(new Event('partials-ready'));
 }
+
 
 /* kick it off immediately */
 injectPartials();

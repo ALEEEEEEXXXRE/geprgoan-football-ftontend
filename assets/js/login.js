@@ -1,11 +1,30 @@
 // assets/js/login.js
-import { saveToken } from './auth-utils.js';
-import { includeHTML } from './dom-utils.js';
 
 document.addEventListener("DOMContentLoaded", async () => {
+  // ✅ Inject header/footer before anything else
+  const includeHTML = async () => {
+    const els = document.querySelectorAll('[data-include-html]');
+    for (const el of els) {
+      const file = el.getAttribute('data-include-html');
+      if (!file) continue;
+      try {
+        const res = await fetch(file);
+        el.outerHTML = await res.text();
+      } catch (e) {
+        console.error(`[include] ${file} →`, e);
+      }
+    }
+  };
+
   await includeHTML();
 
+  const saveToken = (token) => {
+    localStorage.setItem("authToken", token);
+  };
+
   const form = document.querySelector("form");
+  if (!form) return;
+
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
