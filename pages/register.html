@@ -4,45 +4,81 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>რეგისტრაცია</title>
+
+  <!-- Styles -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
   <link rel="stylesheet" href="/assets/css/main.css" />
   <link rel="stylesheet" href="/assets/css/components.css" />
 </head>
+
 <body>
-    <div class="page-wrapper">
+  <div class="page-wrapper">
+    <!-- Header -->
     <div data-include-html="/components/header.html"></div>
 
+    <!-- Registration form -->
     <div class="form-wrapper animate-fadeIn">
       <h2>რეგისტრაცია</h2>
+
       <form>
+        <!-- Name -->
         <div class="input-group">
           <label for="name">სახელი</label>
           <input id="name" type="text" required />
         </div>
+
+        <!-- Last name -->
+        <div class="input-group">
+          <label for="last_name">გვარი</label>
+          <input id="last_name" type="text" required />
+        </div>
+
+        <!-- Age -->
+        <div class="input-group">
+          <label for="age">ასაკი</label>
+          <input id="age" type="number" min="1" required />
+        </div>
+
+        <!-- Email -->
         <div class="input-group">
           <label for="email">ელ-ფოსტა</label>
           <input id="email" type="email" required />
         </div>
+
+        <!-- Password -->
         <div class="input-group">
           <label for="password">პაროლი</label>
           <input id="password" type="password" required />
         </div>
+
+        <!-- Gender -->
+        <div class="input-group">
+          <label>სქესი:</label>
+          <label><input type="radio" name="gender" value="male"   required /> კაცი</label>
+          <label><input type="radio" name="gender" value="female" required /> ქალი</label>
+        </div>
+
         <button class="btn btn-primary" type="submit">რეგისტრაცია</button>
-        <div class="auth-links">უკვე გაქვთ ანგარიში? <a href="login.html">შესვლა</a></div>
+        <div class="auth-links">
+          უკვე გაქვთ ანგარიში?
+          <a href="login.html">შესვლა</a>
+        </div>
       </form>
     </div>
   </div>
 
+  <!-- Footer -->
   <footer class="site-footer">
     <div class="container">
       <div data-include-html="/components/footer.html"></div>
     </div>
   </footer>
 
+  <!-- Shared scripts -->
   <script src="/assets/js/animations.js"></script>
   <script src="/assets/js/football-bg.js"></script>
 
-
+  <!-- Load header / footer HTML -->
   <script>
     (async () => {
       for (const el of document.querySelectorAll('[data-include-html]')) {
@@ -52,41 +88,51 @@
     })();
   </script>
 
+  <!-- Profile / dropdown logic (app.js) -->
   <script type="module" src="/assets/js/app.js"></script>
 
-
+  <!-- Registration handler -->
   <script>
-document.querySelector('form').addEventListener('submit', async function (e) {
-  e.preventDefault();
+    document.querySelector('form').addEventListener('submit', async (e) => {
+      e.preventDefault();
 
-  const name = document.getElementById('name').value;
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
+      const name       = document.getElementById('name').value.trim();
+      const last_name  = document.getElementById('last_name').value.trim();
+      const age        = parseInt(document.getElementById('age').value.trim(), 10);
+      const email      = document.getElementById('email').value.trim();
+      const password   = document.getElementById('password').value.trim();
+      const genderEl   = document.querySelector("input[name='gender']:checked");
+      const gender     = genderEl ? genderEl.value : null;
 
-  // You can also add last_name and age if your form has them
-  const last_name = "Test";  // Replace or collect from form
-  const age = 25;            // Replace or collect from form
+      if (!name || !last_name || !email || !password || isNaN(age) || !gender) {
+        alert("გთხოვთ, შეავსოთ ყველა ველი.");
+        return;
+      }
 
-  const res = await fetch('http://localhost:3000/api/auth/register', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ name, last_name, email, password, age })
-  });
+      try {
+        const res = await fetch("http://localhost:3000/api/auth/register", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ name, last_name, age, email, password, gender })
+        });
 
-  const data = await res.json();
+        const data = await res.json();
 
-  if (res.ok) {
-    alert('🎉 რეგისტრაცია წარმატებით დასრულდა!');
-    window.location.href = 'login.html';
-  } else {
-    alert('⛔ ' + data.message);
-  }
-});
-</script>
+        if (!res.ok) {
+          alert(data.error || "რეგისტრაცია ვერ შესრულდა.");
+          return;
+        }
 
-
-<script src="/assets/js/app.js"></script>
-
+        // store token under a consistent key
+        localStorage.setItem("authToken", data.token);
+        alert("🎉 რეგისტრაცია წარმატებით დასრულდა!");
+        window.location.href = "login.html";
+      } catch (err) {
+        console.error("⚠️ Registration error:", err);
+        alert("სერვერთან კავშირის შეცდომა.");
+      }
+    });
+  </script>
 
   <!-- Floating Circular Menu -->
   <div id="circularMenu" class="circular-menu">
