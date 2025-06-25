@@ -133,3 +133,7 @@ window.addEventListener('partials-ready', () => {
    5.  Helper for player-detail navigation
    -------------------------------------------------- */
 window.goToDetail = id => location.href = `/pages/player-detail.html?id=${id}`;
+
+
+
+

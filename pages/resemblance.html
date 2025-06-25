@@ -4,47 +4,57 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>ვინ ქართველ ფეხბურთელს ჰგავხარ?</title>
-  <link rel="stylesheet" href="/assets/css/main.css"/>
-  <link rel="stylesheet" href="/assets/css/components.css"/>
+
+  <!-- Styles -->
+  <link rel="stylesheet" href="/assets/css/main.css" />
+  <link rel="stylesheet" href="/assets/css/components.css" />
 </head>
 
 <body>
   <div class="page-wrapper">
+    <!-- Header -->
     <div data-include-html="/components/header.html"></div>
 
+    <!-- ➊ Input form -->
     <div class="form-wrapper animate-fadeIn" style="margin-top:120px;">
       <h2>დაადგინე, რომელი ფეხბურთელს ჰგავხარ</h2>
 
       <form id="resemblanceForm">
         <div class="input-group">
           <label for="height">სიმაღლე (სმ)</label>
-          <input type="number" id="height" required min="100" max="250"/>
+          <input type="number" id="height" required min="100" max="250" />
         </div>
+
         <div class="input-group">
           <label for="weight">წონა (კგ)</label>
-          <input type="number" id="weight" required min="30" max="200"/>
+          <input type="number" id="weight" required min="30" max="200" />
         </div>
+
         <div class="input-group">
           <label for="age">ასაკი</label>
-          <input type="number" id="age" required min="10" max="100"/>
+          <input type="number" id="age" required min="10" max="100" />
         </div>
+
         <div class="input-group">
           <label>სქესი:</label>
-          <label><input type="radio" name="gender" value="male" required/> კაცი</label>
-          <label><input type="radio" name="gender" value="female" required/> ქალი</label>
+          <label><input type="radio" name="gender" value="male"   required /> კაცი</label>
+          <label><input type="radio" name="gender" value="female" required /> ქალი</label>
         </div>
+
         <button class="btn btn-primary" type="submit">გამოთვლა</button>
       </form>
 
-      <div id="resemblanceResult" style="margin-top:2rem;"></div>
+      <!-- ➋ Result box (styled like a card) -->
+      <div id="resemblanceResult" class="box" style="margin-top:2rem;"></div>
     </div>
   </div>
 
+  <!-- Footer -->
   <footer class="site-footer">
     <div class="container" data-include-html="/components/footer.html"></div>
   </footer>
 
-  <!-- Load header/footer -->
+  <!-- Inject header / footer once -->
   <script>
     (async () => {
       for (const el of document.querySelectorAll('[data-include-html]')) {
@@ -54,9 +64,7 @@
     })();
   </script>
 
-  <script type="module" src="/assets/js/auth.js"></script>
-
-
+  <!-- Shared logic & resemblance logic -->
   <script type="module" src="/assets/js/app.js"></script>
   <script type="module" src="/assets/js/resemblance.js"></script>
 </body>
