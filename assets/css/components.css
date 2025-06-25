@@ -1,0 +1,92 @@
+/* -------------------------------------------------
+   COMPONENTS (cards / slider / auth links)
+   ------------------------------------------------- */
+
+/* ---------- CARD / SLIDER GRID ---------- */
+.card-section {
+  padding-top: 120px;
+}
+
+.box {
+  width: 350px;
+  background: #1e1e26;
+  border-radius: 10px;
+  box-shadow: var(--shadow);
+  margin: 20px 10px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  transition: transform 0.3s ease, background 0.3s ease;
+  overflow: hidden;
+}
+
+.box:hover {
+  background: #17171d;
+  transform: scale(1.02);
+}
+
+.model {
+  width: 100%;
+  height: 350px;
+  object-fit: cover;
+  border-radius: var(--radius);
+  margin-bottom: 1rem;
+}
+
+.details {
+  width: 100%;
+  padding: 0 1.5rem 2rem;
+  text-align: center;
+}
+.details p {
+  font-weight: 600;
+  color: #bbb;
+  margin-top: 1rem;
+  font-size: 0.95rem;
+  line-height: 1.4;
+}
+.logo {
+  height: 60px;
+  margin-top: 1rem;
+}
+.marvel {
+  font-size: 1.35rem;
+  font-weight: 700;
+  margin-top: 0.75rem;
+}
+
+/* ---------- LOGIN / REGISTER LINKS ---------- */
+.auth-links {
+  text-align: center;
+  margin-top: 1rem;
+  font-size: 0.9rem;
+}
+.auth-links a {
+  color: var(--primary);
+  text-decoration: underline;
+  margin: 0 0.5rem;
+}
+
+/* ---------- RESPONSIVE ---------- */
+@media (max-width: 768px) {
+  .box {
+    width: 92vw;
+    margin: 12px auto;
+  }
+  .model {
+    height: 280px;
+  }
+  .details {
+    width: 92%;
+  }
+}
+
+/* ---------- animated football canvas ----------- */
+#bgCanvas {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  pointer-events: none;
+}

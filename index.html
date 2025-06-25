@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ქართული ფეხბურთი</title>
+
+  <!-- Core styles -->
+   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="assets/css/components.css">
+  <link rel="stylesheet" href="assets/css/animations.css">
+
+</head>
+<body>
+  <!-- header injected -->
+  <div data-include-html="components/header.html"></div>
+
+  <!-- Hero ------------------------------------------------------------ -->
+  <section class="hero">
+    <div class="swiper heroSwiper">
+      <div class="swiper-wrapper">
+        <div class="swiper-slide hero__slide"
+             style="background-image:url('assets/images/backgrounds/hero-bg.jpg')">
+          <div class="hero__overlay"></div>
+          <div class="hero__content animate-fadeIn">
+            <h1>საქართველოს ნაკრები</h1>
+            <p>ჩვენ გვწამს გამარჯვების!</p>
+            <a href="pages/footballers.html" class="btn btn-primary">ნახე მოთამაშეები</a>
+          </div>
+        </div>
+      </div>
+      <div class="swiper-button-prev"></div>
+      <div class="swiper-button-next"></div>
+      <div class="swiper-pagination"></div>
+    </div>
+  </section>
+
+  <!-- footer injected -->
+  <div data-include-html="components/footer.html"></div>
+
+  <!-- JS -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/swiper/11.0.5/swiper-bundle.min.js"></script>
+  <script src="assets/js/animations.js"></script>
+  <script>
+    /* load header/footer */
+    (async()=>{for(const n of document.querySelectorAll('[data-include-html]')){
+      const r=await fetch(n.getAttribute('data-include-html')); n.outerHTML=await r.text();
+    }})();
+    /* init hero swiper */
+    new Swiper('.heroSwiper',{
+      loop:true,
+      pagination:{el:'.swiper-pagination'},
+      navigation:{nextEl:'.swiper-button-next',prevEl:'.swiper-button-prev'}
+    });
+  </script>
+
+  
+
+  <script type="module" src="/assets/js/app.js"></script>
+  <script src="/assets/js/app.js"></script>
+
+
+
+<!-- Floating Circular Menu -->
+<div id="circularMenu" class="circular-menu">
+  <a class="floating-btn" onclick="document.getElementById('circularMenu').classList.toggle('active');">
+    <i class="fa fa-plus"></i>
+  </a>
+
+  <ul class="items-wrapper">
+    <li class="menu-item"><a href="#" class="fa fa-google-plus"></a></li>
+    <li class="menu-item"><a href="#" class="fa fa-facebook"></a></li>
+    <li class="menu-item"><a href="#" class="fa fa-twitter"></a></li>
+    <li class="menu-item"><a href="#" class="fa fa-linkedin"></a></li>
+  </ul>
+</div>
+
+
+</body>
+</html>

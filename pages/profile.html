@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="ka">
+<head>
+  <meta charset="UTF-8">
+  <title>პროფილი</title>
+  <link rel="stylesheet" href="/assets/css/main.css">
+</head>
+<body>
+  <div data-include-html="/components/header.html"></div>
+
+  <div class="container" style="margin-top:120px;">
+    <h2>თქვენი პროფილი</h2>
+    <p><strong>სახელი:</strong> <span id="userName"></span></p>
+    <p><strong>ელ-ფოსტა:</strong> <span id="userEmail"></span></p>
+  </div>
+
+  <script>
+    const token = localStorage.getItem("authToken");
+    if (!token) {
+      alert("გთხოვთ გაიარეთ ავტორიზაცია.");
+      window.location.href = "login.html";
+    } else {
+      // You should create an endpoint /me that returns user info
+      fetch("http://localhost:3000/api/auth/me", {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("userName").textContent = data.name;
+        document.getElementById("userEmail").textContent = data.email;
+      })
+      .catch(() => {
+        alert("სესიის ვადა ამოიწურა, გაიარეთ ავტორიზაცია თავიდან.");
+        localStorage.removeItem("authToken");
+        window.location.href = "login.html";
+      });
+    }
+  </script>
+
+  <script src="/assets/js/app.js"></script>
+  
+</body>
+</html>

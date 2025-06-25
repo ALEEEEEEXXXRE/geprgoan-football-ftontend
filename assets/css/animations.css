@@ -1,0 +1,3 @@
+/* fade-in on load OR via JS adding .in */
+.animate-fadeIn{ opacity:0; transform:translateY(25px); transition:.6s ease-out; }
+.animate-fadeIn.in{ opacity:1; transform:none; }
