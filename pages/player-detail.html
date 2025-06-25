@@ -40,7 +40,9 @@
   </div>
 
   <!-- Footer -->
+
   <div data-include-html="/components/footer.html"></div>
+
 
   <!-- Floating Circular Menu -->
   <div id="circularMenu" class="circular-menu">
@@ -66,9 +68,11 @@
   </script>
 
   <!-- Football Animation -->
+
   <script src="/assets/js/football-bg.js"></script>
 
   <script src="/assets/js/app.js"></script>
+
 
   <!-- Player Fetch Script -->
  <script>
@@ -97,7 +101,7 @@
       document.getElementById("goalsNational").textContent =
         `გოლები ნაკრებში: ${player.goalsNational ?? "-"}`;
       document.getElementById("playerImage").src =
-        player.images?.[0] || "/assets/images/players/default.jpg";
+        player.images?.[0] || "../assets/images/players/default.jpg";
       
 
       // ── NEW: theme-audio block ───────────────────────────

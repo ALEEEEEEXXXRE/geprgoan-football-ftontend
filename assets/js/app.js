@@ -45,28 +45,9 @@ document.addEventListener("DOMContentLoaded", () => {
   }
 
   // ✅ Profile icon logic
-const iconImg = document.getElementById('profileIcon');
-const dropdown = document.getElementById("profileDropdown");
-const profileMenu = document.getElementById("profileMenu");
-
-if (iconImg && dropdown && profileMenu) {
-  iconImg.addEventListener("click", (e) => {
-    e.stopPropagation(); // Prevents it from closing immediately
-    profileMenu.classList.toggle("show");
-  });
-
-  document.addEventListener("click", (e) => {
-    if (!dropdown.contains(e.target)) {
-      profileMenu.classList.remove("show");
-    }
-  });
-
-  document.getElementById("logoutBtn").addEventListener("click", () => {
-    localStorage.removeItem("authToken");
-    alert("გამოსვლა შესრულდა წარმატებით.");
-    window.location.href = "/georgian-football/index.html";
-  });
-}
+  const iconContainer = document.getElementById('profile-icon');
+  const dropdown = document.getElementById("profileDropdown");
+  const profileMenu = document.getElementById("profileMenu");
 
   if (iconContainer) {
     try {
@@ -84,22 +65,23 @@ if (iconImg && dropdown && profileMenu) {
       img.title = name;
       img.style.cursor = "pointer";
 
-
       if (dropdown) dropdown.style.display = "inline-block";
-      img.addEventListener("click", () => {
-        profileMenu.classList.toggle("show");
-      });
 
-      document.getElementById("logoutBtn").addEventListener("click", () => {
-        localStorage.removeItem("authToken");
-        alert("გამოსვლა შესრულდა წარმატებით.");
-        window.location.href = "/georgian-football/index.html";
+      img.addEventListener("click", (e) => {
+        e.stopPropagation(); // prevent immediate close
+        profileMenu.classList.toggle("show");
       });
 
       document.addEventListener("click", (e) => {
         if (!dropdown.contains(e.target)) {
           profileMenu.classList.remove("show");
         }
+      });
+
+      document.getElementById("logoutBtn").addEventListener("click", () => {
+        localStorage.removeItem("authToken");
+        alert("გამოსვლა შესრულდა წარმატებით.");
+        window.location.href = "/georgian-football/index.html";
       });
 
     } catch (err) {

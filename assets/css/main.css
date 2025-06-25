@@ -253,7 +253,7 @@ body {
 .profile-menu {
   position: absolute;
   top: 40px;
-  right: -20px;
+  right: 0;
   background: #fff;
   border: 1px solid #ccc;
   list-style: none;
