@@ -1,128 +1,58 @@
-const BASE_API_URL = 'http://localhost:3000/api';
-const PLAYER_API   = `${BASE_API_URL}/players`;
-const AUTH_API     = `${BASE_API_URL}/auth`;
+/* ==========================================================
+   assets/js/api.js  –  single source of truth for all HTTP
+   ========================================================== */
 
-// Token helper
-function authHeaders() {
-  const token = localStorage.getItem('token');
+const API_BASE = 'http://localhost:3000/api';
+
+/* ---------- helper: add bearer token if present ---------- */
+const authHeaders = () => {
+  const token = localStorage.getItem('authToken');
   return token ? { Authorization: `Bearer ${token}` } : {};
-}
+};
 
-// -----------------------------
-// ⚽ PLAYER API
-// -----------------------------
-
-/**
- * Fetch all players from backend
- * @returns {Promise<Array>}
- */
-export async function getAllPlayers() {
+/* ---------- universal fetch wrapper (returns json|error) -- */
+async function callApi(url, opts = {}) {
   try {
-    const res = await fetch(PLAYER_API);
-    if (!res.ok) throw new Error('Failed to fetch players');
-    return await res.json();
-  } catch (error) {
-    console.error('[API] getAllPlayers:', error);
-    return [];
+    const res  = await fetch(url, opts);
+    const data = await res.json().catch(() => ({})); // fallback if no JSON
+
+    if (!res.ok) {
+      const msg = data.error || data.message || 'სერვერის შეცდომა';
+      throw new Error(msg);
+    }
+    return { data };
+  } catch (err) {
+    console.error('[API]', err.message);
+    return { error: err.message };
   }
 }
 
-/**
- * Fetch one player by ID
- * @param {string} playerId
- * @returns {Promise<Object|null>}
- */
-export async function getPlayerById(playerId) {
-  try {
-    const res = await fetch(`${PLAYER_API}/${playerId}`);
-    if (!res.ok) throw new Error('Player not found');
-    return await res.json();
-  } catch (error) {
-    console.error('[API] getPlayerById:', error);
-    return null;
-  }
-}
+/* ==========================================================
+   🌟  PUBLIC HELPERS
+   ========================================================== */
 
-/**
- * Submit resemblance data (if backend supports it)
- * @param {Object} data {height, weight, age}
- * @returns {Promise<Object>} response with similarity %
- */
-export async function checkResemblanceBackend(data) {
-  try {
-    const res = await fetch(`${PLAYER_API}/resemblance`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        ...authHeaders(),
-      },
-      body: JSON.stringify(data)
-    });
-    if (!res.ok) throw new Error('Resemblance check failed');
-    return await res.json();
-  } catch (error) {
-    console.error('[API] checkResemblance:', error);
-    return { similarity: 0 };
-  }
-}
+/* ⚽  PLAYERS ------------------------------------------------ */
+export const getAllPlayers = () =>
+  callApi(`${API_BASE}/players`);
 
-// 👤 AUTH API
-// -----------------------------
+export const getPlayerById = (id) =>
+  callApi(`${API_BASE}/players/${id}`);
 
-/**
- * Register user
- * @param {Object} data - { name, last_name, email, password, age, gender }
- * @returns {Promise<Object>} token or error
- */
-export async function registerUser(data) {
-  try {
-    const res = await fetch(`${AUTH_API}/register`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
-    });
-    return await res.json();
-  } catch (error) {
-    console.error('[API] registerUser:', error);
-    return { error: 'Registration failed' };
-  }
-}
+/* 👤  AUTH -------------------------------------------------- */
+export const register = (payload) =>
+  callApi(`${API_BASE}/auth/register`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
 
-/**
- * Login user
- * @param {Object} data - { email, password }
- * @returns {Promise<Object>} token + gender or error
- */
-export async function loginUser(data) {
-  try {
-    const res = await fetch(`${AUTH_API}/login`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(data)
-    });
-    return await res.json();
-  } catch (error) {
-    console.error('[API] loginUser:', error);
-    return { error: 'Login failed' };
-  }
-}
+export const login = (payload) =>
+  callApi(`${API_BASE}/auth/login`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  });
 
-/**
- * Get current user from token
- * @returns {Promise<Object|null>}
- */
-export async function getMe() {
-  try {
-    const res = await fetch(`${AUTH_API}/me`, {
-      headers: {
-        'Content-Type': 'application/json',
-        ...authHeaders(),
-      }
-    });
-    if (!res.ok) return null;
-    return await res.json();
-  } catch (error) {
-    console.error('[API] getMe:', error);
-    return null;
-  }
-}
+/* example of an authenticated call */
+export const getMe = () =>
+  callApi(`${API_BASE}/auth/me`, { headers: authHeaders() });

@@ -4,20 +4,24 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>მოთამაშის დეტალები</title>
+
+  <!-- Styles -->
   <link rel="stylesheet" href="/assets/css/main.css"/>
   <link rel="stylesheet" href="/assets/css/components.css"/>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"/>
 </head>
+
 <body>
   <!-- Header -->
   <div data-include-html="/components/header.html"></div>
 
-  <!-- Player Detail -->
-  <div class="container form-wrapper animate-fadeIn" style="padding-top:120px; max-width:800px; margin:auto; position:relative; z-index:1;">
-    <h2 id="playerTitle" style="margin-bottom:1rem;">მოთამაშის დეტალები</h2>
+  <!-- Player Details -->
+  <div class="container form-wrapper animate-fadeIn" style="padding-top:120px; max-width:800px; margin:auto;">
+    <h2 style="text-align:center;">მოთამაშის დეტალები</h2>
+
     <div class="box" style="margin:auto;">
-     <img id="playerImage" class="model" src="/assets/images/players/img" alt="Player Photo"/>
-      <div class="details">
+      <img id="playerImage" class="model" src="" alt="Player Photo" style="max-width:100%; border-radius:1rem;" />
+      <div class="details" style="padding: 1rem; text-align:center;">
         <h3 id="playerName" class="marvel">მოთამაშის სახელი</h3>
         <p id="position">პოზიცია: -</p>
         <p id="club">კლუბი: -</p>
@@ -25,24 +29,25 @@
         <p id="height">სიმაღლე: - სმ</p>
         <p id="weight">წონა: - კგ</p>
         <p id="goalsNational">გოლები ნაკრებში: -</p>
-        <!-- 🎵 Player Theme Audio -->
-  <div style="margin-top: 1rem;">
-    <label for="playerTheme"><strong>თემატური მელოდია:</strong></label><br/>
-    <audio id="playerTheme" controls style="width: 100%; max-width: 300px;">
-      <source src="/assets/audio/player-themes/default.mp3" type="audio/mpeg">
-      თქვენი ბრაუზერი არ უჭერს მხარს აუდიო პლეერს.
-    </audio>
-  </div>
-</div>
+
+        <!-- Audio Theme -->
+        <div style="margin-top: 1rem;">
+          <label><strong>თემატური მელოდია:</strong></label><br/>
+          <audio id="playerTheme" controls style="width: 100%; max-width: 300px;">
+            <source src="" type="audio/mpeg">
+            თქვენი ბრაუზერი არ უჭერს მხარს აუდიო პლეერს.
+          </audio>
+        </div>
+      </div>
     </div>
 
-    <a class="btn btn-secondary" href="footballers.html" style="margin-top:2rem; display:inline-block;">🔙 უკან</a>
+    <div style="text-align:center; margin-top: 2rem;">
+      <a class="btn btn-secondary" href="footballers.html">🔙 უკან</a>
+    </div>
   </div>
 
   <!-- Footer -->
-
   <div data-include-html="/components/footer.html"></div>
-
 
   <!-- Floating Circular Menu -->
   <div id="circularMenu" class="circular-menu">
@@ -57,71 +62,63 @@
     </ul>
   </div>
 
-  <!-- Header/Footer Include Script -->
+  <!-- Header/Footer Inject -->
   <script>
     (async () => {
-      for (const n of document.querySelectorAll('[data-include-html]')) {
-        const r = await fetch(n.getAttribute('data-include-html'));
-        n.outerHTML = await r.text();
+      for (const el of document.querySelectorAll('[data-include-html]')) {
+        const res = await fetch(el.getAttribute('data-include-html'));
+        el.outerHTML = await res.text();
       }
     })();
   </script>
 
-  <!-- Football Animation -->
 
+<script type="module" src="/assets/js/auth.js"></script>
+
+
+
+  <!-- Background animation -->
   <script src="/assets/js/football-bg.js"></script>
-
   <script src="/assets/js/app.js"></script>
 
+  <!-- Load player data -->
+  <script>
+    async function loadPlayer() {
+      const urlParams = new URLSearchParams(window.location.search);
+      const id = urlParams.get("id");
+      if (!id) return;
 
-  <!-- Player Fetch Script -->
- <script>
-  async function loadPlayer() {
-    const urlParams = new URLSearchParams(window.location.search);
-    const id = urlParams.get("id");
-    if (!id) return;
+      try {
+        const res = await fetch(`http://localhost:3000/api/players/${id}`);
+        const player = await res.json();
 
-    try {
-      const res = await fetch(`http://localhost:3000/api/players/${id}`);
-      const player = await res.json();
+        // Populate DOM
+        document.getElementById("playerName").textContent = `${player.firstName} ${player.lastName}`;
+        document.getElementById("position").textContent = `პოზიცია: ${player.position || "-"}`;
+        document.getElementById("club").textContent = `კლუბი: ${player.club || "-"}`;
+        document.getElementById("birthDate").textContent = `დაბადების თარიღი: ${player.birthDate?.split("T")[0] || "-"}`;
+        document.getElementById("height").textContent = `სიმაღლე: ${player.height || "-"} სმ`;
+        document.getElementById("weight").textContent = `წონა: ${player.weight || "-"} კგ`;
+        document.getElementById("goalsNational").textContent = `გოლები ნაკრებში: ${player.goalsNational ?? "-"}`;
+        
+        const imageEl = document.getElementById("playerImage");
+        imageEl.src = player.images?.[0] || "/assets/images/players/placeholder.jpg";
+        imageEl.onerror = () => {
+          imageEl.src = "/assets/images/players/placeholder.jpg";
+        };
 
-      // ── text + image fields ───────────────────────────────
-      document.getElementById("playerName").textContent =
-        `${player.firstName} ${player.lastName}`;
-      document.getElementById("position").textContent =
-        `პოზიცია: ${player.position || "-"}`;
-      document.getElementById("club").textContent =
-        `კლუბი: ${player.club || "-"}`;
-      document.getElementById("birthDate").textContent =
-        `დაბადების თარიღი: ${player.birthDate?.split("T")[0] || "-"}`;
-      document.getElementById("height").textContent =
-        `სიმაღლე: ${player.height || "-"} სმ`;
-      document.getElementById("weight").textContent =
-        `წონა: ${player.weight || "-"} კგ`;
-      document.getElementById("goalsNational").textContent =
-        `გოლები ნაკრებში: ${player.goalsNational ?? "-"}`;
-      document.getElementById("playerImage").src =
-        player.images?.[0] || "../assets/images/players/default.jpg";
-      
+        // Audio theme
+        const audioPath = `/assets/audio/${id}.mp3`;
+        const themeSource = document.querySelector("#playerTheme source");
+        themeSource.src = audioPath;
+        document.getElementById("playerTheme").load();
 
-      // ── NEW: theme-audio block ───────────────────────────
-      const themeAudio  = document.getElementById("playerTheme");
-      const themeSource = themeAudio.querySelector("source");
-
-      const audioPath = id
-        ? `/assets/audio/${id}.mp3`
-        : `/assets/audio/68518e8c69c3d6ffbf546ba9.mp3`;
-
-      themeSource.src = audioPath;
-      themeAudio.load();     // refresh so the new file is recognised
+      } catch (e) {
+        alert("მოთამაშის მონაცემების ჩატვირთვა ვერ მოხერხდა.");
+      }
     }
-    catch (e) {
-      alert("მოთამაშის მონაცემების ჩატვირთვა ვერ მოხერხდა.");
-    }
-  }
 
-  loadPlayer();
-</script>
-
+    loadPlayer();
+  </script>
 </body>
 </html>

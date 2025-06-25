@@ -1,18 +1,19 @@
 // assets/js/login.js
+import { saveToken } from './auth-utils.js';
+import { includeHTML } from './dom-utils.js';
 
-document.addEventListener("DOMContentLoaded", () => {
-  const form     = document.querySelector("form");
-  const emailInp = document.getElementById("email");
-  const passInp  = document.getElementById("password");
+document.addEventListener("DOMContentLoaded", async () => {
+  await includeHTML();
 
+  const form = document.querySelector("form");
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
 
-    const email    = emailInp.value.trim();
-    const password = passInp.value.trim();
+    const email = document.getElementById("email").value.trim();
+    const password = document.getElementById("password").value.trim();
 
     if (!email || !password) {
-      alert("შეიყვანეთ ელ-ფოსტა და პაროლი.");
+      alert("გთხოვთ შეიყვანოთ ელ-ფოსტა და პაროლი.");
       return;
     }
 
@@ -20,22 +21,20 @@ document.addEventListener("DOMContentLoaded", () => {
       const res = await fetch("http://localhost:3000/api/auth/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password })
+        body: JSON.stringify({ email, password }),
       });
 
       const data = await res.json();
 
       if (!res.ok) {
-        alert(data.error || "ავტორიზაცია ვერ შესრულდა.");
+        alert(data.error || "შესვლა ვერ მოხერხდა.");
         return;
       }
 
-      // ✅ Save token only (no user is returned)
-      localStorage.setItem("token", data.token);
-      alert("ავტორიზაცია წარმატებით დასრულდა!");
-      window.location.href = "../index.html";
+      saveToken(data.token);
+      window.location.href = "/index.html";
     } catch (err) {
-      console.error("[login.js]", err);
+      console.error("⚠️ Login error:", err);
       alert("სერვერთან კავშირის შეცდომა.");
     }
   });

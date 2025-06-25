@@ -4,81 +4,60 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>შესვლა</title>
+
+  <!-- Styles -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
   <link rel="stylesheet" href="/assets/css/main.css" />
   <link rel="stylesheet" href="/assets/css/components.css" />
 </head>
+
 <body>
   <div class="page-wrapper">
+    <!-- Header -->
     <div data-include-html="/components/header.html"></div>
 
+    <!-- Login form -->
     <div class="form-wrapper animate-fadeIn">
       <h2>შესვლა</h2>
-      <form>
+
+      <form id="loginForm">
         <div class="input-group">
           <label for="email">ელ-ფოსტა</label>
           <input id="email" type="email" required />
         </div>
+
         <div class="input-group">
           <label for="password">პაროლი</label>
           <input id="password" type="password" required />
         </div>
+
         <button class="btn btn-primary" type="submit">შესვლა</button>
         <div class="auth-links">არ გაქვთ ანგარიში? <a href="register.html">რეგისტრაცია</a></div>
       </form>
     </div>
   </div>
 
+  <!-- Footer -->
   <footer class="site-footer">
-    <div class="container">
-      <div data-include-html="/components/footer.html"></div>
-    </div>
+    <div class="container" data-include-html="/components/footer.html"></div>
   </footer>
 
+  <!-- BG canvas / animations (თუ გჭირდებათ) -->
   <script src="/assets/js/football-bg.js"></script>
-  <script>
-    (async () => {
-      for (const el of document.querySelectorAll('[data-include-html]')) {
-        const res = await fetch(el.getAttribute('data-include-html'));
-        el.outerHTML = await res.text();
-      }
-    })();
-  </script>
 
-  <script>
-document.querySelector('form').addEventListener('submit', async function (e) {
-  e.preventDefault();
+  <!-- ✨ Shared global logic (header/footer load, dropdown, floating menu) -->
+  <script type="module" src="/assets/js/app.js"></script>
 
-  const email = document.getElementById('email').value;
-  const password = document.getElementById('password').value;
-
-  const res = await fetch('http://localhost:3000/api/auth/login', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, password })
-  });
-
-  const data = await res.json();
-
-  if (res.ok) {
-    // Save token to localStorage
-    localStorage.setItem('token', data.token);
-    alert('✅ წარმატებული ავტორიზაცია');
-    window.location.href = '/index.html';
-  } else {
-    alert('⛔ ' + data.message);
-  }
-});
-</script>
+  <!-- ✨ Page-specifc logic -->
+  <script type="module" src="/assets/js/login.js"></script>
 
 
-<script type="module" src="/assets/js/app.js"></script>
-<script src="/assets/js/app.js"></script>
+  <script type="module" src="/assets/js/auth.js"></script>
 
 
-  <!-- Floating Circular Menu -->
+  <!-- Floating circular menu markup -->
   <div id="circularMenu" class="circular-menu">
-    <a class="floating-btn" onclick="document.getElementById('circularMenu').classList.toggle('active');">
+    <a class="floating-btn">
       <i class="fa fa-plus"></i>
     </a>
     <ul class="items-wrapper">

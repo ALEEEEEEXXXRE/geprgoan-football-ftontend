@@ -39,9 +39,11 @@ document.addEventListener("DOMContentLoaded", () => {
         return;
       }
 
-      localStorage.setItem("token", data.token);
-      alert("რეგისტრაცია წარმატებით დასრულდა!");
-      window.location.href = "../index.html";
+      localStorage.setItem("authToken", data.token);
+      // Custom confirmation message with redirect link
+      const wrapper = document.querySelector(".form-wrapper");
+      wrapper.innerHTML = `<h2>რეგისტრაცია წარმატებით დასრულდა</h2>
+                           <a href='/index.html' class='btn btn-primary'>მთავარი</a>`;
     } catch (err) {
       console.error("[register.js]", err);
       alert("სერვერთან კავშირის შეცდომა.");

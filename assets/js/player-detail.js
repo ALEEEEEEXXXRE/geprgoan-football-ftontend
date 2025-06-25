@@ -1,4 +1,4 @@
-import { getPlayerById } from './api.js';
+import { getPlayerById } from '/api.js';
 
 document.addEventListener("DOMContentLoaded", async () => {
   const params = new URLSearchParams(window.location.search);

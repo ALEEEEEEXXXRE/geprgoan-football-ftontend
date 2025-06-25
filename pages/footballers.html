@@ -4,69 +4,70 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ფეხბურთელები</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-<link rel="stylesheet" href="/assets/css/main.css">
-<link rel="stylesheet" href="/assets/css/components.css">
-<link rel="stylesheet" href="/assets/css/animations.css">
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightslider/1.1.6/css/lightslider.min.css"/>
-
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="/assets/css/main.css">
+  <link rel="stylesheet" href="/assets/css/components.css">
+  <link rel="stylesheet" href="/assets/css/animations.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/lightslider/1.1.6/css/lightslider.min.css"/>
+</head>
 <body>
-  <div data-include-html="/components/header.html"></div>
 
-  <div class="container">
-    <div class="card-section"> <!-- ✅ Added wrapper -->
-      <ul id="autoWidth" class="cs-hidden">
+<!-- Header -->
+<div data-include-html="/components/header.html"></div>
 
-         <!-- Mamardashvili -->
-      <li class="item-a">
-        <div class="box" data-id="mamardashvili" onclick="goToDetail('68518e8c69c3d6ffbf546ba9')">
-          <p class="marvel">გიორგი მამარდაშვილი</p>
-          <img src="/assets/images/players/giorgi-mamardashvili.jpg.jpg" class="model" alt="Mamardashvili">
-          <div class="details">
-            <img src="/assets/images/logos/logo-gff.png.png" class="logo" alt="logo">
-            <p>საქართველოს ნაკრების მეკარე, EURO 2024-ზე დაუვიწყარი სეივები.</p>
-          </div>
+<!-- ===== PLAYER CARDS ===== -->
+<div class="container" style="padding-top:120px">
+  <ul id="autoWidth" class="cs-hidden player-grid">
+
+    <!-- Mamardashvili -->
+    <li class="item-a">
+      <div class="box" data-id="mamardashvili" onclick="goToDetail('68518e8c69c3d6ffbf546ba9')">
+        <p class="marvel">გიორგი მამარდაშვილი</p>
+        <img src="/assets/images/players/giorgi-mamardashvili.jpg.jpg" class="model" alt="Mamardashvili">
+        <div class="details">
+          <img src="/assets/images/logos/logo-gff.png.png" class="logo" alt="logo">
+          <p>საქართველოს ნაკრების მეკარე, EURO 2024-ზე დაუვიწყარი სეივები.</p>
         </div>
-      </li>
+      </div>
+    </li>
 
-      <!-- Mikautadze -->
-      <li class="item-a">
-        <div class="box" data-id="mikautadze" onclick="goToDetail('6859a6ac037240af6738a203')">
-          <p class="marvel">გიორგი მიქაუტაძე</p>
-          <img src="/assets/images/players/georges-mikautadze.jpg.jpg" class="model" alt="Mikautadze">
-          <div class="details">
-            <img src="/assets/images/logos/logo-gff.png.png" class="logo" alt="logo">
-            <p>გოლიანი ფორვარდი, რომელმაც გადამწყვეტი ბურთები გაიტანა.</p>
-          </div>
+    <!-- Mikautadze -->
+    <li class="item-a">
+      <div class="box" data-id="mikautadze" onclick="goToDetail('6859a6ac037240af6738a203')">
+        <p class="marvel">გიორგი მიქაუტაძე</p>
+        <img src="/assets/images/players/georges-mikautadze.jpg.jpg" class="model" alt="Mikautadze">
+        <div class="details">
+          <img src="/assets/images/logos/logo-gff.png.png" class="logo" alt="logo">
+          <p>გოლიანი ფორვარდი, რომელმაც გადამწყვეტი ბურთები გაიტანა.</p>
         </div>
-      </li>
+      </div>
+    </li>
 
-        <!-- Kvaratskhelia -->
-        <li class="item-a">
-          <div class="box" data-id="Kvaratskhelia" onclick="goToDetail('68518e8c69c3d6ffbf546ba8')">
-            <p class="marvel">ხვიჩა კვარაცხელია</p>
-            <img src="/assets/images/players/khvicha-kvaratskhelia.jpg.jpg" class="model" alt="Kvaratskhelia">
-            <div class="details">
-              <img src="/assets/images/logos/logo-gff.png.png" class="logo" alt="logo">
-              <p>“ნაპოლის” ვარსკვლავი და ქართული ფეხბურთის ელჩი.</p>
-            </div>
-          </div>
-        </li>
+    <!-- Kvaratskhelia -->
+    <li class="item-a">
+      <div class="box" data-id="Kvaratskhelia" onclick="goToDetail('68518e8c69c3d6ffbf546ba8')">
+        <p class="marvel">ხვიჩა კვარაცხელია</p>
+        <img src="/assets/images/players/khvicha-kvaratskhelia.jpg.jpg" class="model" alt="Kvaratskhelia">
+        <div class="details">
+          <img src="/assets/images/logos/logo-gff.png.png" class="logo" alt="logo">
+          <p>“ნაპოლის” ვარსკვლავი და ქართული ფეხბურთის ელჩი.</p>
+        </div>
+      </div>
+    </li>
 
-        <!-- Kiteishvili -->
-        <li class="item-a">
-          <div class="box" data-id="Kiteishvili" onclick="goToDetail('685a7c6e50f8d0f8f3bc5c36')">
-            <p class="marvel">ოთარ კიტეიშვილი</p>
-            <img src="/assets/images/players/otar-kiteishvili.jpg.jpg" class="model"alt="Kiteishvili">
-            <div class="details">
-              <img src="/assets/images/logos/logo-gff.png.png" class="logo" alt="logo">
-              <p>კრეატიული ნახევარმცველი ავსტრიის ლიგიდან.</p>
-            </div>
-          </div>
-        </li>
-      
+    <!-- Kiteishvili -->
+    <li class="item-a">
+      <div class="box" data-id="Kiteishvili" onclick="goToDetail('685a7c6e50f8d0f8f3bc5c36')">
+        <p class="marvel">ოთარ კიტეიშვილი</p>
+        <img src="/assets/images/players/otar-kiteishvili.jpg.jpg" class="model" alt="Kiteishvili">
+        <div class="details">
+          <img src="/assets/images/logos/logo-gff.png.png" class="logo" alt="logo">
+          <p>კრეატიული ნახევარმცველი ავსტრიის ლიგიდან.</p>
+        </div>
+      </div>
+    </li>
 
-  <!-- 5  ლუკა გუღეშაშვილი -->
+ <!-- 5  ლუკა გუღეშაშვილი -->
 <li class="item-a">
   <div class="box" data-id="gugeshvili" onclick="goToDetail ('68518e8c69c3d6ffbf546baa')">
     <p class="marvel">ლუკა გუღეშაშვილი</p>
@@ -246,27 +247,28 @@
   </div>
 </li>
 
-      </ul>
-  </div> <!-- ✅ End wrapper -->
+  </ul>
 </div>
 
-  <div data-include-html="/components/footer.html"></div>
+<!-- Footer -->
+<div data-include-html="/components/footer.html"></div>
 
-  <!-- libs -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/lightslider/1.1.6/js/lightslider.min.js"></script>
-  <!-- slider init -->
-  <script src="/assets/js/app.js"></script>  
+<!-- ========== JS ========== -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/lightslider/1.1.6/js/lightslider.min.js"></script>
+<script type="module" src="/assets/js/app.js"></script>
 
+<!-- header/footer inject -->
+<script>
+  (async () => {
+    for (const el of document.querySelectorAll('[data-include-html]')) {
+      const res = await fetch(el.getAttribute('data-include-html'));
+      el.outerHTML = await res.text();
+    }
+  })();
+</script>
 
-  <script>
-    /* load header/footer */
-    (async()=>{for(const n of document.querySelectorAll('[data-include-html]')){
-      const r=await fetch(n.getAttribute('data-include-html')); n.outerHTML=await r.text();
-    }})();
-
-   
-  </script>
+<script type="module" src="/assets/js/auth.js"></script>
 
 
 <!-- Floating Circular Menu -->
@@ -282,5 +284,6 @@
     <li class="menu-item"><a href="#" class="fa fa-linkedin"></a></li>
   </ul>
 </div>
+
 </body>
 </html>

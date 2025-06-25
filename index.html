@@ -7,6 +7,7 @@
 
   <!-- Core styles -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/swiper/11.0.5/swiper-bundle.min.css">
   <link rel="stylesheet" href="assets/css/main.css">
   <link rel="stylesheet" href="assets/css/components.css">
   <link rel="stylesheet" href="assets/css/animations.css">
@@ -41,8 +42,9 @@
   <!-- JS Scripts -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/swiper/11.0.5/swiper-bundle.min.js"></script>
   <script src="assets/js/animations.js"></script>
+
+  <!-- header/footer injector -->
   <script>
-    // Load reusable components
     (async () => {
       for (const el of document.querySelectorAll('[data-include-html]')) {
         const res = await fetch(el.getAttribute('data-include-html'));
@@ -50,7 +52,6 @@
       }
     })();
 
-    // Init Swiper
     new Swiper('.heroSwiper', {
       loop: true,
       pagination: { el: '.swiper-pagination' },
@@ -61,6 +62,10 @@
     });
   </script>
 
+  <script type="module" src="/assets/js/auth.js"></script>
+
+
+  <!-- Global App Logic -->
   <script type="module" src="assets/js/app.js"></script>
 
   <!-- Floating Circular Menu -->

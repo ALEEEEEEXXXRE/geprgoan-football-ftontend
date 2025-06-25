@@ -12,22 +12,22 @@
 
 <body>
   <div class="page-wrapper">
+    <!-- Header -->
     <div data-include-html="/components/header.html"></div>
 
-    <!-- ✨ FORM -->
+    <!-- Registration Form -->
     <div class="form-wrapper animate-fadeIn" id="formWrap">
       <h2>რეგისტრაცია</h2>
-
       <form id="regForm">
-        <div class="input-group"><label>სახელი</label>     <input id="name"      required /></div>
+        <div class="input-group"><label>სახელი</label>     <input id="name" required /></div>
         <div class="input-group"><label>გვარი</label>      <input id="last_name" required /></div>
         <div class="input-group"><label>ასაკი</label>      <input id="age" type="number" min="1" required /></div>
-        <div class="input-group"><label>ელ-ფოსტა</label>   <input id="email" type="email"  required /></div>
+        <div class="input-group"><label>ელ-ფოსტა</label>   <input id="email" type="email" required /></div>
         <div class="input-group"><label>პაროლი</label>     <input id="password" type="password" required /></div>
 
         <div class="input-group">
           <label>სქესი:</label>
-          <label><input type="radio" name="gender" value="male"   required /> კაცი</label>
+          <label><input type="radio" name="gender" value="male" required /> კაცი</label>
           <label><input type="radio" name="gender" value="female" required /> ქალი</label>
         </div>
 
@@ -37,13 +37,15 @@
     </div>
   </div>
 
-  <footer class="site-footer"><div class="container" data-include-html="/components/footer.html"></div></footer>
+  <footer class="site-footer">
+    <div class="container" data-include-html="/components/footer.html"></div>
+  </footer>
 
-  <script src="/assets/js/animations.js"></script>
+  <!-- Shared / global logic -->
   <script src="/assets/js/football-bg.js"></script>
   <script type="module" src="/assets/js/app.js"></script>
 
-  <!-- Load header / footer once -->
+  <!-- Include header/footer HTML -->
   <script>
     (async () => {
       for (const el of document.querySelectorAll('[data-include-html]')) {
@@ -53,42 +55,15 @@
     })();
   </script>
 
-  <!-- ✅ Registration handler with inline success message -->
-  <script>
-    document.getElementById('regForm').addEventListener('submit', async e => {
-      e.preventDefault();
+  <script type="module" src="/assets/js/auth.js"></script>
 
-      const get  = id => document.getElementById(id).value.trim();
-      const name = get('name');
-      const last_name = get('last_name');
-      const age  = parseInt(get('age'), 10);
-      const email = get('email');
-      const password = get('password');
-      const gender = document.querySelector('input[name="gender"]:checked')?.value;
 
-      if (!name || !last_name || !email || !password || isNaN(age) || !gender) {
-        alert("გთხოვთ, შეავსოთ ყველა ველი.");
-        return;
-      }
+  <!-- 🎯 Register logic -->
+  <script type="module" src="/assets/js/register.js"></script>
 
-      const res  = await fetch('http://localhost:3000/api/auth/register', {
-        method:'POST',
-        headers:{'Content-Type':'application/json'},
-        body: JSON.stringify({ name,last_name,age,email,password,gender })
-      });
-      const data = await res.json();
+  
+  <script type="module" src="/assets/js/app.js"></script>
 
-      if (!res.ok)  return alert(data.error || "რეგისტრაცია ვერ შესრულდა.");
 
-      localStorage.setItem('authToken', data.token);
-
-      /* replace form with success block */
-      document.getElementById('formWrap').innerHTML = `
-        <h2 style="text-align:center;">რეგისტრაცია წარმატებით დასრულდა</h2>
-        <div style="text-align:center;margin-top:1.4rem">
-          <a class="btn btn-primary" href="/index.html">მთავარი</a>
-        </div>`;
-    });
-  </script>
 </body>
 </html>

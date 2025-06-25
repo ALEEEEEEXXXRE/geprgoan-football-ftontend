@@ -1,4 +1,105 @@
-// 🌀 LightSlider init + nav highlight
+/* =======================================================================
+   assets/js/app.js  –  shared UI logic for every page
+   ======================================================================= */
+
+/* --------------------------------------------------
+   0.  UTIL  – wait until the header/footer are injected
+   -------------------------------------------------- */
+async function injectPartials() {
+  const els = document.querySelectorAll('[data-include-html]');
+  for (const el of els) {
+    const file = el.getAttribute('data-include-html');
+    if (!file) continue;
+    try {
+      const res = await fetch(file);
+      el.outerHTML = await res.text();
+    } catch (e) {
+      console.error(`[include] ${file} →`, e);
+    }
+  }
+  /* tell the rest of the script we’re ready */
+  window.dispatchEvent(new Event('partials-ready'));
+}
+
+/* kick it off immediately */
+injectPartials();
+
+/* --------------------------------------------------
+   1.  Floating circular menu
+   -------------------------------------------------- */
+window.addEventListener('partials-ready', () => {
+  const menuBtn      = document.querySelector('.floating-btn');
+  const circularMenu = document.getElementById('circularMenu');
+  if (menuBtn && circularMenu) {
+    menuBtn.onclick = () => circularMenu.classList.toggle('active');
+  }
+});
+
+/* --------------------------------------------------
+   2.  Profile-icon dropdown + protected links
+   -------------------------------------------------- */
+window.addEventListener('partials-ready', () => {
+  const token = localStorage.getItem('authToken');
+
+  /* protect footballer pages */
+  const protectedLinks = document.querySelectorAll(
+    '.nav a[href*="footballers"], .btn[href*="footballers"]'
+  );
+  protectedLinks.forEach(a => {
+    a.addEventListener('click', e => {
+      if (!token) {
+        e.preventDefault();
+        alert('გთხოვთ, ჯერ გაიარეთ ავტორიზაცია.');
+        location.href = '/pages/login.html';
+      }
+    });
+  });
+  if (!token) protectedLinks.forEach(a => (a.style.display = 'none'));
+
+  /* profile icon / dropdown */
+  const dropdownBox = document.getElementById('profileDropdown');
+  const menuUl      = document.getElementById('profileMenu');
+  const iconImg     = document.getElementById('profileIcon');
+
+  if (!dropdownBox || !menuUl || !iconImg) return;   // header not found
+
+  if (token) {
+    try {
+      const { name, gender } = JSON.parse(atob(token.split('.')[1]));
+
+      let src = '/assets/images/icons/guest.png';
+      if (gender === 'male')   src = '/assets/images/icons/icons8-profile-50.png';
+      if (gender === 'female') src = '/assets/images/icons/female.png';
+
+      iconImg.src   = src;
+      iconImg.title = name;
+      iconImg.style.cursor = 'pointer';
+
+      iconImg.onclick = e => {
+        e.stopPropagation();
+        menuUl.classList.toggle('show');
+      };
+
+      document.addEventListener('click', e => {
+        if (!dropdownBox.contains(e.target)) menuUl.classList.remove('show');
+      });
+
+      const logoutBtn = document.getElementById('logoutBtn');
+      if (logoutBtn) logoutBtn.onclick = () => {
+        localStorage.removeItem('authToken');
+        location.href = '/index.html';
+      };
+    } catch (e) {
+      console.warn('[auth] corrupt token', e);
+    }
+  } else {
+    iconImg.onclick = () => (location.href = '/pages/register.html');
+  }
+});
+
+/* --------------------------------------------------
+   3.  jQuery lightSlider for footballers.html
+   -------------------------------------------------- */
 $(function () {
   if ($('#autoWidth').length) {
     $('#autoWidth').lightSlider({
@@ -12,96 +113,19 @@ $(function () {
       onSliderLoad: () => $('#autoWidth').removeClass('cs-hidden')
     });
   }
+});
 
-  // 🔍 Highlight active nav link
-  const path = window.location.pathname.split('/').pop();
+/* --------------------------------------------------
+   4.  Highlight active nav link (runs after header injected)
+   -------------------------------------------------- */
+window.addEventListener('partials-ready', () => {
+  const current = location.pathname.split('/').pop();
   document.querySelectorAll('.nav a').forEach(a => {
-    if (a.getAttribute('href').endsWith(path)) a.classList.add('active');
+    if (a.getAttribute('href')?.endsWith(current)) a.classList.add('active');
   });
 });
 
-// 🌟 Global function to navigate to player detail page
-function goToDetail(playerId) {
-  window.location.href = `player-detail.html?id=${playerId}`;
-}
-
-// ⚙️ App logic after DOM is ready
-document.addEventListener("DOMContentLoaded", () => {
-  const token = localStorage.getItem("authToken");
-
-  // 🛡️ Restrict access to footballer pages if not authenticated
-  const protectedLinks = document.querySelectorAll('.nav a[href*="footballers"], .btn[href*="footballers"]');
-  protectedLinks.forEach(link => {
-    link.addEventListener("click", (e) => {
-      if (!token) {
-        e.preventDefault();
-        alert("გთხოვთ, ჯერ გაიარეთ ავტორიზაცია.");
-        window.location.href = "/pages/login.html";
-      }
-    });
-  });
-
-// 👁️ Hide footballer links if not logged in
-if (!token) protectedLinks.forEach(el => (el.style.display = "none"));
-const dropdownBox = document.getElementById("profileDropdown");
-const profileMenu = document.getElementById("profileMenu");
-const iconImg     = document.getElementById("profileIcon");
-
-if (iconImg && profileMenu && dropdownBox) {
-  if (token) {
-    try {
-      const payload = JSON.parse(atob(token.split('.')[1]));
-      const { name, gender } = payload;
-
-      // Set icon image based on gender
-      let imgSrc = "/assets/images/icons/guest.png";
-      if (gender === "male")
-        imgSrc = "/assets/images/icons/icons8-profile-50.png";
-      if (gender === "female")
-        imgSrc = "/assets/images/icons/female.png";
-
-      iconImg.src = imgSrc;
-      iconImg.title = name;
-      iconImg.style.cursor = "pointer";
-
-      // 🔽 Toggle dropdown on click
-      iconImg.addEventListener("click", (e) => {
-        e.stopPropagation(); // prevent close immediately
-        profileMenu.classList.toggle("show");
-      });
-
-      // ⛔ Close menu when clicking outside
-      document.addEventListener("click", (e) => {
-        if (!dropdownBox.contains(e.target)) {
-          profileMenu.classList.remove("show");
-        }
-      });
-
-      // 🚪 Logout button
-      const logoutBtn = document.getElementById("logoutBtn");
-      if (logoutBtn) {
-        logoutBtn.addEventListener("click", () => {
-          localStorage.removeItem("authToken");
-          window.location.href = "/index.html";
-        });
-      }
-
-    } catch (err) {
-      console.warn("⚠️ Token parsing failed", err);
-    }
-  } else {
-    // Not logged in behavior (optional)
-    iconImg.onclick = () => window.location.href = "/pages/register.html";
-  }
-}
-
-  // 🎯 Safe click vs drag (player boxes)
-  document.querySelectorAll('.box').forEach(box => {
-    let isDragging = false;
-    box.addEventListener('mousedown', () => isDragging = false);
-    box.addEventListener('mousemove', () => isDragging = true);
-    box.addEventListener('mouseup', function () {
-      if (!isDragging) this.click();
-    });
-  });
-});
+/* --------------------------------------------------
+   5.  Helper for player-detail navigation
+   -------------------------------------------------- */
+window.goToDetail = id => location.href = `/pages/player-detail.html?id=${id}`;
