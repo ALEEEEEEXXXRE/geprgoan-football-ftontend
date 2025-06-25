@@ -28,10 +28,10 @@ document.addEventListener("DOMContentLoaded", async () => {
   }
 
   // ✅ Set image
-  imgEl.src = player.images?.[0] || "/georgian-football/assets/images/players/placeholder.jpg";
+  imgEl.src = player.images?.[0] || "/assets/images/players/placeholder.jpg";
   imgEl.alt = `${player.firstName} ${player.lastName}`;
   imgEl.onerror = () => {
-    imgEl.src = "/georgian-football/assets/images/players/placeholder.jpg";
+    imgEl.src = "/assets/images/players/placeholder.jpg";
   };
 
   // ✅ Set name

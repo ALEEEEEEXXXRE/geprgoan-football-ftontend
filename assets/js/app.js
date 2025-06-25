@@ -1,3 +1,4 @@
+// 🌀 LightSlider init + nav highlight
 $(function () {
   if ($('#autoWidth').length) {
     $('#autoWidth').lightSlider({
@@ -12,91 +13,89 @@ $(function () {
     });
   }
 
-  // Highlight active nav link
+  // 🔍 Highlight active nav link
   const path = window.location.pathname.split('/').pop();
   document.querySelectorAll('.nav a').forEach(a => {
     if (a.getAttribute('href').endsWith(path)) a.classList.add('active');
   });
 });
 
-// Global function
+// 🌟 Global function to navigate to player detail page
 function goToDetail(playerId) {
   window.location.href = `player-detail.html?id=${playerId}`;
 }
 
+// ⚙️ App logic after DOM is ready
 document.addEventListener("DOMContentLoaded", () => {
   const token = localStorage.getItem("authToken");
 
-  // ⛔ Restrict access to footballer pages if not authenticated
+  // 🛡️ Restrict access to footballer pages if not authenticated
   const protectedLinks = document.querySelectorAll('.nav a[href*="footballers"], .btn[href*="footballers"]');
   protectedLinks.forEach(link => {
     link.addEventListener("click", (e) => {
       if (!token) {
         e.preventDefault();
         alert("გთხოვთ, ჯერ გაიარეთ ავტორიზაცია.");
-        window.location.href = "/georgian-football/pages/login.html";
+        window.location.href = "/pages/login.html";
       }
     });
   });
 
-  // ⛔ Hide links/buttons if not logged in (visual)
-  if (!token) {
-    protectedLinks.forEach(el => el.style.display = 'none');
-  }
+// 👁️ Hide footballer links if not logged in
+if (!token) protectedLinks.forEach(el => (el.style.display = "none"));
+const dropdownBox = document.getElementById("profileDropdown");
+const profileMenu = document.getElementById("profileMenu");
+const iconImg     = document.getElementById("profileIcon");
 
-  // ✅ Profile icon logic
-  const iconContainer = document.getElementById('profile-icon');
-  const dropdown = document.getElementById("profileDropdown");
-  const profileMenu = document.getElementById("profileMenu");
-
-  if (iconContainer) {
+if (iconImg && profileMenu && dropdownBox) {
+  if (token) {
     try {
-      if (!token) throw new Error("No token");
-
       const payload = JSON.parse(atob(token.split('.')[1]));
       const { name, gender } = payload;
 
-      let imgSrc = '/georgian-football/assets/images/icons/icons8-profile-50.png';
-      if (gender === 'male') imgSrc = '/georgian-football/assets/images/icons/icons8-customer-50.png';
-      else if (gender === 'female') imgSrc = '/georgian-football/assets/images/icons/icons8-female-user-update-50.png';
+      // Set icon image based on gender
+      let imgSrc = "/assets/images/icons/guest.png";
+      if (gender === "male")
+        imgSrc = "/assets/images/icons/icons8-profile-50.png";
+      if (gender === "female")
+        imgSrc = "/assets/images/icons/female.png";
 
-      const img = document.getElementById("profileIcon");
-      img.src = imgSrc;
-      img.title = name;
-      img.style.cursor = "pointer";
+      iconImg.src = imgSrc;
+      iconImg.title = name;
+      iconImg.style.cursor = "pointer";
 
-      if (dropdown) dropdown.style.display = "inline-block";
-
-      img.addEventListener("click", (e) => {
-        e.stopPropagation(); // prevent immediate close
+      // 🔽 Toggle dropdown on click
+      iconImg.addEventListener("click", (e) => {
+        e.stopPropagation(); // prevent close immediately
         profileMenu.classList.toggle("show");
       });
 
+      // ⛔ Close menu when clicking outside
       document.addEventListener("click", (e) => {
-        if (!dropdown.contains(e.target)) {
+        if (!dropdownBox.contains(e.target)) {
           profileMenu.classList.remove("show");
         }
       });
 
-      document.getElementById("logoutBtn").addEventListener("click", () => {
-        localStorage.removeItem("authToken");
-        alert("გამოსვლა შესრულდა წარმატებით.");
-        window.location.href = "/georgian-football/index.html";
-      });
+      // 🚪 Logout button
+      const logoutBtn = document.getElementById("logoutBtn");
+      if (logoutBtn) {
+        logoutBtn.addEventListener("click", () => {
+          localStorage.removeItem("authToken");
+          window.location.href = "/index.html";
+        });
+      }
 
     } catch (err) {
-      // 👤 Not logged in
-      const img = document.createElement('img');
-      img.src = '/georgian-football/assets/images/icons/icons8-profile-50.png';
-      img.alt = 'Register';
-      img.style.cssText = 'height: 34px; margin-left: 1rem; cursor: pointer;';
-      img.onclick = () => window.location.href = '/georgian-football/pages/register.html';
-      iconContainer.appendChild(img);
-      if (dropdown) dropdown.style.display = "none";
+      console.warn("⚠️ Token parsing failed", err);
     }
+  } else {
+    // Not logged in behavior (optional)
+    iconImg.onclick = () => window.location.href = "/pages/register.html";
   }
+}
 
-  // 🎯 Safe click vs drag
+  // 🎯 Safe click vs drag (player boxes)
   document.querySelectorAll('.box').forEach(box => {
     let isDragging = false;
     box.addEventListener('mousedown', () => isDragging = false);

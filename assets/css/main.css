@@ -246,11 +246,8 @@ body {
 
 /* ---------- PROFILE DROPDOWN ---------- */
 
-.profile-dropdown {
-  position: relative;
-  display: inline-block;
-}
 .profile-menu {
+  display: none;
   position: absolute;
   top: 40px;
   right: 0;
@@ -259,7 +256,6 @@ body {
   list-style: none;
   padding: 0;
   margin: 0;
-  display: none;
   z-index: 1000;
 }
 .profile-menu li {
@@ -272,6 +268,8 @@ body {
 .profile-menu.show {
   display: block;
 }
+
+
 
 
 /* ---------- FLOATING CIRCULAR MENU ---------- */
